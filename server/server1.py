@@ -1,7 +1,6 @@
-from flask import Flask, session
+from flask import Flask
 from flask_cors import CORS
-from os import path
- 
+
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "crestron"
 CORS(app, supports_credentials=True)
@@ -11,8 +10,7 @@ TOGGLE_STATE = False
 
 @app.route('/health', methods=['GET'])
 def health():
-    global SERVER_NUM
-    return str(round((SERVER_NUM + 1)/12, 3))
+    return '34'
 
 @app.route('/toggle/<update>', methods=['GET'])
 def toggle(update):

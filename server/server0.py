@@ -1,6 +1,5 @@
-from flask import Flask, session
+from flask import Flask
 from flask_cors import CORS
-from os import path
  
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "crestron"
@@ -11,7 +10,7 @@ TOGGLE_STATE = False
 
 @app.route('/health', methods=['GET'])
 def health():
-    return '0.123'
+    return '13'
 
 @app.route('/toggle/<update>', methods=['GET'])
 def toggle(update):

@@ -1,40 +1,59 @@
 import React, { useEffect, useState } from "react";
-import {Box, Checkbox, Switch, Typography} from '@mui/material';
+import {Box, Checkbox, LinearProgress, Switch, Typography} from '@mui/material';
 
 const style = {
-  width: 150,
-  height: 150,
-  backgroundColor: 'primary.light',
-  borderRadius: 2,
-  margin: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-  display: 'flex',
-  flexDirection: 'column',
+  box: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    maxWidth: 150,
+    maxHeight: 150,
+    margin: 1,
+    padding: 2,
+    borderRadius: 3,
+    backgroundColor: (theme) => theme.palette.primary.background,
+  },
+  text: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: 12,
+    color: (theme) => theme.palette.primary.main,
+  },
+  health: {
+    height: 13,
+    width: 90,
+    marginBottom: 1,
+    borderRadius: 5,
+    backgroundColor: (theme) => theme.palette.primary.light,
+    '& .MuiLinearProgress-bar': {
+      backgroundColor: (theme) => theme.palette.primary.main,
+    },
+  }
 }
 
-const ControlBox = ({ serverNum, port, checked, setChecked }) => {
+const ControlBox = ({ serverNum, addr, port, checked, setChecked }) => {
   const [health, setHealth] = useState(0)
   const [toggle, setToggle] = useState(false)
 
-  const addr = '127.0.0.1'
-
   useEffect(() => {
-    fetch('http://' + addr + ':' + port + '/health', { credentials: 'include' })
+    fetch(addr + port + '/health', { credentials: 'include' })
       .then(response => response.text())
       .then(responseText => setHealth(responseText))
       .catch(error => console.log('Error getting health'))
-  }, [port]);
+  }, [addr, port]);
 
   useEffect(() => {
-    fetch('http://' + addr + ':' + port + '/toggle/false', { credentials: 'include' })
+    fetch(addr + port + '/toggle/false', { credentials: 'include' })
     .then(response => response.text())
       .then(responseText => setToggle(responseText === 'True'))
       .catch(error => console.log('Error getting toggle state'))
-  }, [port]);
+  }, [addr, port]);
 
   const handleToggle = () => {
-    fetch('http://' + addr + ':' + port + '/toggle/true', { credentials: 'include' })
+    fetch(addr + port + '/toggle/true', { credentials: 'include' })
     .then(responseText => setToggle(!toggle))
     .catch(error => console.log('Error updating toggle state'))
   }
@@ -43,23 +62,22 @@ const ControlBox = ({ serverNum, port, checked, setChecked }) => {
     setChecked(checked.map((checkState, i) => i === serverNum ? !checkState : checkState))
   }
 
-  return (<>
-    <Box
-      sx={style}
-    >
-      <Typography> 
-        PORT {port} 
+  return (
+    <Box sx={{...style.box, ...{opacity: checked[serverNum] ? '100%' : '50%'}}}>
+      <Typography sx={style.text}> 
+        Port {port} 
         <Checkbox checked={checked[serverNum]} onChange={handleCheck} />
       </Typography>
-      <Typography> 
-        Status: 
-        <Switch checked={toggle} onChange={handleToggle} enabled={checked} /> 
+      <Typography sx={style.text}> 
+        Toggle: 
+        <Switch checked={toggle} onChange={handleToggle} disabled={!checked[serverNum]} /> 
       </Typography>
-      <Typography> 
-        Health: {health} 
+      <Typography sx={style.text}> 
+        Health: {health}%
       </Typography>
+      <LinearProgress sx={style.health} variant="determinate" value={parseInt(health)} />
     </Box>
-  </>);
+  );
 };
 
 export default ControlBox;

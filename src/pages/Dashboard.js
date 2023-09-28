@@ -1,44 +1,69 @@
 import React, { useState } from "react";
-import { IconButton, Typography } from '@mui/material';
+import { Box, IconButton, Grid } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import DeselectIcon from '@mui/icons-material/Deselect';
 
 import ControlBox from "../modules/ControlBox";
 
 const styles = {
-  refreshButton: {
-    backgroundColor: 'primary.dark',
-    borderRadius: 2,
-    margin: 1,
+  button: {
+    color: 'white',
     width: 30,
     height: 30,
-    color: 'white',
-  },
-  text: {
     margin: 1,
-    fontFamily: 'Arial',
+    borderRadius: 2,
+    backgroundColor: (theme) => theme.palette.primary.background,
+  },
+  header: {
+    color: (theme) => theme.palette.primary.background,
+    justifyContent: 'center',
+    alignItems: 'center',
+    display: 'flex',
+    margin: 1,
     fontSize: 30,
-    color: 'primary.dark',
+    fontFamily: 'Roboto',
+  }, 
+  grid: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  gridContainer: {
+    display: 'flex',
+    flexDirection: 'column',
   }
 }
 
-const Dashboard = () => {
-  const [checked, setChecked] = useState(Array(12).fill(true))
-  const ports = ['5000', '5001']
+const Dashboard = ({width, height, addr, ports}) => {
+  const [checked, setChecked] = useState(Array(width*height).fill(true))
 
-  const refreshPage = () => {
-    window.location.reload(false);
+  const mapRow = (row) => {
+    return ports.slice(row*width, (row+1)*width).map((port, i) => {
+      return <ControlBox key={i} serverNum={row*width+i} addr={addr} port={port} checked={checked} setChecked={setChecked}/>
+    })
+  }
+
+  const mapGrid = () => {
+    const grid = []
+    for (let row = 0; row < height; row++) {
+      grid.push(<Grid item sx={styles.grid} xs={4}> {mapRow(row)} </Grid>)
+    }
+    return grid
   }
   
   return (<>
-    <Typography sx={styles.text}>
-      DASHBOARD
-      <IconButton onClick={refreshPage} sx={styles.refreshButton}> 
+    <Box sx={styles.header}>
+      <IconButton onClick={() => window.location.reload(false)} sx={styles.button}> 
         <RefreshIcon /> 
       </IconButton>
-    </Typography>
+      <IconButton onClick={() => setChecked(Array(width*height).fill(false))} sx={styles.button}> 
+        <DeselectIcon /> 
+      </IconButton>
+    </Box>
 
-    <ControlBox serverNum={0} port={ports[0]} checked={checked} setChecked={setChecked}/>
-    <ControlBox serverNum={1} port={ports[1]} checked={checked} setChecked={setChecked}/>
+    <Grid container sx={styles.gridContainer}>
+      {mapGrid()}
+    </Grid>
+
   </>);
 };
 
