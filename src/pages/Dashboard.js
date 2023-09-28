@@ -56,8 +56,7 @@ const Dashboard = ({ width, height, addr, ports }) => {
     for (let row = 0; row < height; row++) {
       grid.push(
         <Grid item sx={styles.grid} xs={4}>
-          {' '}
-          {mapRow(row)}{' '}
+          {mapRow(row)}
         </Grid>,
       )
     }

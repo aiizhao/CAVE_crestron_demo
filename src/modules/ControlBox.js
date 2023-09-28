@@ -48,20 +48,20 @@ const ControlBox = ({ serverNum, addr, port, checked, setChecked }) => {
     fetch(`${addr + port}/health`, { credentials: 'include' })
       .then((response) => response.text())
       .then((responseText) => setHealth(responseText))
-      .catch((error) => console.log('Error getting health'))
+      .catch(() => console.log('Error getting health'))
   }, [addr, port])
 
   useEffect(() => {
     fetch(`${addr + port}/toggle/false`, { credentials: 'include' })
       .then((response) => response.text())
       .then((responseText) => setToggle(responseText === 'True'))
-      .catch((error) => console.log('Error getting toggle state'))
+      .catch(() => console.log('Error getting toggle state'))
   }, [addr, port])
 
   const handleToggle = () => {
     fetch(`${addr + port}/toggle/true`, { credentials: 'include' })
-      .then((responseText) => setToggle(!toggle))
-      .catch((error) => console.log('Error updating toggle state'))
+      .then(() => setToggle(!toggle))
+      .catch(() => console.log('Error updating toggle state'))
   }
 
   const handleCheck = () => {

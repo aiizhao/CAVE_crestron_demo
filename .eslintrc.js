@@ -78,7 +78,7 @@ module.exports = {
     'import/no-unassigned-import': ['error', { allow: ['**/*.css'] }],
     'import/no-anonymous-default-export': 'error',
     'import/no-cycle': 'error',
-    
+
     // prettier rules
     // complies with Prettier '--jsx-single-quote' default value
     'jsx-quotes': ['error', 'prefer-double'],
