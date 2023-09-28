@@ -1,5 +1,11 @@
-import React, { useEffect, useState } from "react";
-import {Box, Checkbox, LinearProgress, Switch, Typography} from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  LinearProgress,
+  Switch,
+  Typography,
+} from '@mui/material'
+import React, { useEffect, useState } from 'react'
 
 const style = {
   box: {
@@ -31,7 +37,7 @@ const style = {
     '& .MuiLinearProgress-bar': {
       backgroundColor: (theme) => theme.palette.primary.main,
     },
-  }
+  },
 }
 
 const ControlBox = ({ serverNum, addr, port, checked, setChecked }) => {
@@ -39,45 +45,57 @@ const ControlBox = ({ serverNum, addr, port, checked, setChecked }) => {
   const [toggle, setToggle] = useState(false)
 
   useEffect(() => {
-    fetch(addr + port + '/health', { credentials: 'include' })
-      .then(response => response.text())
-      .then(responseText => setHealth(responseText))
-      .catch(error => console.log('Error getting health'))
-  }, [addr, port]);
+    fetch(`${addr + port}/health`, { credentials: 'include' })
+      .then((response) => response.text())
+      .then((responseText) => setHealth(responseText))
+      .catch((error) => console.log('Error getting health'))
+  }, [addr, port])
 
   useEffect(() => {
-    fetch(addr + port + '/toggle/false', { credentials: 'include' })
-    .then(response => response.text())
-      .then(responseText => setToggle(responseText === 'True'))
-      .catch(error => console.log('Error getting toggle state'))
-  }, [addr, port]);
+    fetch(`${addr + port}/toggle/false`, { credentials: 'include' })
+      .then((response) => response.text())
+      .then((responseText) => setToggle(responseText === 'True'))
+      .catch((error) => console.log('Error getting toggle state'))
+  }, [addr, port])
 
   const handleToggle = () => {
-    fetch(addr + port + '/toggle/true', { credentials: 'include' })
-    .then(responseText => setToggle(!toggle))
-    .catch(error => console.log('Error updating toggle state'))
+    fetch(`${addr + port}/toggle/true`, { credentials: 'include' })
+      .then((responseText) => setToggle(!toggle))
+      .catch((error) => console.log('Error updating toggle state'))
   }
 
   const handleCheck = () => {
-    setChecked(checked.map((checkState, i) => i === serverNum ? !checkState : checkState))
+    setChecked(
+      checked.map((checkState, i) =>
+        i === serverNum ? !checkState : checkState,
+      ),
+    )
   }
 
   return (
-    <Box sx={{...style.box, ...{opacity: checked[serverNum] ? '100%' : '50%'}}}>
-      <Typography sx={style.text}> 
-        Port {port} 
+    <Box
+      sx={{ ...style.box, ...{ opacity: checked[serverNum] ? '100%' : '50%' } }}
+    >
+      <Typography sx={style.text}>
+        Port {port}
         <Checkbox checked={checked[serverNum]} onChange={handleCheck} />
       </Typography>
-      <Typography sx={style.text}> 
-        Toggle: 
-        <Switch checked={toggle} onChange={handleToggle} disabled={!checked[serverNum]} /> 
+      <Typography sx={style.text}>
+        Toggle:
+        <Switch
+          checked={toggle}
+          onChange={handleToggle}
+          disabled={!checked[serverNum]}
+        />
       </Typography>
-      <Typography sx={style.text}> 
-        Health: {health}%
-      </Typography>
-      <LinearProgress sx={style.health} variant="determinate" value={parseInt(health)} />
+      <Typography sx={style.text}>Health: {health}%</Typography>
+      <LinearProgress
+        sx={style.health}
+        variant="determinate"
+        value={parseInt(health)}
+      />
     </Box>
-  );
-};
+  )
+}
 
-export default ControlBox;
+export default ControlBox
