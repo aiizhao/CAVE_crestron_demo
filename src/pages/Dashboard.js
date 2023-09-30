@@ -41,7 +41,7 @@ const Dashboard = ({ width, height, addr, ports }) => {
       return (
         <ControlBox
           key={i}
-          serverNum={row * width + i}
+          serverId={row * width + i}
           addr={addr}
           port={port}
           checked={checked}
@@ -73,7 +73,7 @@ const Dashboard = ({ width, height, addr, ports }) => {
           <RefreshIcon />
         </IconButton>
         <IconButton
-          onClick={() => setChecked(checked.fill(false))}
+          onClick={() => setChecked(Array(width * height).fill(false))}
           sx={styles.button}
         >
           <DeselectIcon />

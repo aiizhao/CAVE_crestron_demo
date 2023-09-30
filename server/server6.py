@@ -5,7 +5,7 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "crestron"
 CORS(app, supports_credentials=True)
 
-SERVER_NUM = 6
+SERVER_ID = 6
 TOGGLE_STATE = False
 
 @app.route('/health', methods=['GET'])
@@ -20,4 +20,4 @@ def toggle(update):
     return str(TOGGLE_STATE)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000 + SERVER_NUM)
+    app.run(debug=True, port=5000 + SERVER_ID)

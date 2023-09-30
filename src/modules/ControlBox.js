@@ -40,7 +40,7 @@ const style = {
   },
 }
 
-const ControlBox = ({ serverNum, addr, port, checked, setChecked }) => {
+const ControlBox = ({ serverId, addr, port, checked, setChecked }) => {
   const [health, setHealth] = useState(0)
   const [toggle, setToggle] = useState(false)
 
@@ -67,32 +67,32 @@ const ControlBox = ({ serverNum, addr, port, checked, setChecked }) => {
   const handleCheck = () => {
     setChecked(
       checked.map((checkState, i) =>
-        i === serverNum ? !checkState : checkState,
+        i === serverId ? !checkState : checkState,
       ),
     )
   }
 
   return (
     <Box
-      sx={{ ...style.box, ...{ opacity: checked[serverNum] ? '100%' : '50%' } }}
+      sx={{ ...style.box, ...{ opacity: checked[serverId] ? '100%' : '50%' } }}
     >
       <Typography sx={style.text}>
         Port {port}
-        <Checkbox checked={checked[serverNum]} onChange={handleCheck} />
+        <Checkbox checked={checked[serverId]} onChange={handleCheck} />
       </Typography>
       <Typography sx={style.text}>
         Toggle:
         <Switch
           checked={toggle}
           onChange={handleToggle}
-          disabled={!checked[serverNum]}
+          disabled={!checked[serverId]}
         />
       </Typography>
       <Typography sx={style.text}>Health: {health}%</Typography>
       <LinearProgress
         sx={style.health}
-        variant="determinate"
         value={parseInt(health)}
+        variant="determinate"
       />
     </Box>
   )

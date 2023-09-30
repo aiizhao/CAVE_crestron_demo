@@ -14,21 +14,13 @@ const style = {
 }
 
 const App = () => {
+  const width = 4
+  const height = 3
   const addr = 'http://127.0.0.1:'
-  const ports = [
-    '5000',
-    '5001',
-    '5002',
-    '5003',
-    '5004',
-    '5005',
-    '5006',
-    '5007',
-    '5008',
-    '5009',
-    '5010',
-    '5011',
-  ]
+  const ports = [...Array(width * height).keys()].map(
+    (serverId) => `${5000 + serverId}`,
+  )
+
   return (
     <Box sx={style}>
       <ThemeProvider theme={theme}>
@@ -37,7 +29,12 @@ const App = () => {
             <Route
               path="/"
               element={
-                <Dashboard width={4} height={3} addr={addr} ports={ports} />
+                <Dashboard
+                  width={width}
+                  height={height}
+                  addr={addr}
+                  ports={ports}
+                />
               }
             />
           </Routes>
