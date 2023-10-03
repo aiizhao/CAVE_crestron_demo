@@ -10,7 +10,7 @@ TOGGLE_STATE = False
 
 @app.route('/health', methods=['GET'])
 def health():
-    return '36'
+    return 'False'
 
 @app.route('/toggle/<update>', methods=['GET'])
 def toggle(update):

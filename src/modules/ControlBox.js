@@ -1,10 +1,6 @@
-import {
-  Box,
-  Checkbox,
-  LinearProgress,
-  Switch,
-  Typography,
-} from '@mui/material'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
+import { Box, Checkbox, IconButton, Switch, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 
 const style = {
@@ -41,16 +37,18 @@ const style = {
 }
 
 const ControlBox = ({ serverId, addr, port, checked, setChecked }) => {
-  const [health, setHealth] = useState(0)
+  const [health, setHealth] = useState(false)
   const [toggle, setToggle] = useState(false)
 
+  // get health
   useEffect(() => {
     fetch(`${addr + port}/health`, { credentials: 'include' })
       .then((response) => response.text())
-      .then((responseText) => setHealth(responseText))
+      .then((responseText) => setHealth(responseText === 'True'))
       .catch(() => console.log('Error getting health'))
   }, [addr, port])
 
+  // get toggle state
   useEffect(() => {
     fetch(`${addr + port}/toggle/false`, { credentials: 'include' })
       .then((response) => response.text())
@@ -58,6 +56,7 @@ const ControlBox = ({ serverId, addr, port, checked, setChecked }) => {
       .catch(() => console.log('Error getting toggle state'))
   }, [addr, port])
 
+  // flip toggle state
   const handleToggle = () => {
     fetch(`${addr + port}/toggle/true`, { credentials: 'include' })
       .then(() => setToggle(!toggle))
@@ -88,12 +87,13 @@ const ControlBox = ({ serverId, addr, port, checked, setChecked }) => {
           disabled={!checked[serverId]}
         />
       </Typography>
-      <Typography sx={style.text}>Health: {health}%</Typography>
-      <LinearProgress
-        sx={style.health}
-        value={parseInt(health)}
-        variant="determinate"
-      />
+      <Typography sx={style.text}>
+        Health:
+        <IconButton>
+          {' '}
+          {health ? <CheckCircleIcon /> : <ErrorOutlineIcon />}{' '}
+        </IconButton>
+      </Typography>
     </Box>
   )
 }
